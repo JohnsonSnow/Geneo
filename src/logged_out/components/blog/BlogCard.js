@@ -8,7 +8,7 @@ import { Typography, Card, Box, withStyles } from "@material-ui/core";
 const styles = (theme) => ({
   img: {
     width: "100%",
-    height: "auto",
+    height: "300px",
     marginBottom: 8,
   },
   card: {
@@ -56,7 +56,7 @@ function BlogCard(props) {
     <Card className={classes.card}>
       {src && (
         <Link to={url} tabIndex={-1}>
-          <img src={src} className={classes.img} alt="" />
+          <img src={src} className={classes.img} alt=""/>
         </Link>
       )}
       <Box p={2}>
