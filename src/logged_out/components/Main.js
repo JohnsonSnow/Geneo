@@ -1,4 +1,5 @@
 import React, { memo, useState, useEffect, useCallback } from "react";
+import axios from "axios";
 import PropTypes from "prop-types";
 import AOS from "aos/dist/aos";
 import { withStyles } from "@material-ui/core";
@@ -7,7 +8,7 @@ import Footer from "./footer/Footer";
 import "aos/dist/aos.css";
 import CookieRulesDialog from "./cookies/CookieRulesDialog";
 import CookieConsent from "./cookies/CookieConsent";
-import dummyBlogPosts from "../dummy_data/blogPosts";
+//import dummyBlogPosts from "../dummy_data/blogPosts";
 import DialogSelector from "./register_login/DialogSelector";
 import Routing from "./Routing";
 import smoothScrollTop from "../../shared/functions/smoothScrollTop";
@@ -28,6 +29,23 @@ function Main(props) {
   const [blogPosts, setBlogPosts] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(null);
   const [isCookieRulesDialogOpen, setIsCookieRulesDialogOpen] = useState(false);
+
+   const [BlogPost, setBlogPost ] = useState([]);
+
+
+  const getPosts = () => {
+      axios.get("https://geneo-app.herokuapp.com/api/blog")
+            .then(res => {
+              setBlogPost(res.data.blogPosts);
+            })
+            .catch(e => {
+              console.log(e.message)
+            });
+  };
+
+  useEffect(() => {
+    getPosts();
+  }, [])
 
   const selectHome = useCallback(() => {
     smoothScrollTop();
@@ -73,7 +91,7 @@ function Main(props) {
   }, [setDialogOpen]);
 
   const fetchBlogPosts = useCallback(() => {
-    const blogPosts = dummyBlogPosts.map((blogPost) => {
+    const blogPosts = BlogPost?.map((blogPost) => {
       let title = blogPost.title;
       title = title.toLowerCase();
       /* Remove unwanted characters, only accept alphanumeric and space */
@@ -87,7 +105,8 @@ function Main(props) {
       return blogPost;
     });
     setBlogPosts(blogPosts);
-  }, [setBlogPosts]);
+    //setBlogPosts([]);
+  }, [setBlogPosts, BlogPost]);
 
   const handleCookieRulesDialogOpen = useCallback(() => {
     setIsCookieRulesDialogOpen(true);
